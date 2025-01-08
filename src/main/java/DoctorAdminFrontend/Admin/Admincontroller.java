@@ -8,19 +8,19 @@ import org.springframework.ui.Model;
 public class Admincontroller {
 
 
-    @GetMapping("/admin")
+    @GetMapping("/index")
     public String showHomePage(Model model) {
     	
         model.addAttribute("welcomeMessage", "Welcome to the homepage!");
         
-        return "index.html"; 
+        return "index"; 
     }
     
     @GetMapping("/appointment-list")
     public String appointment() {
     	
         
-        return "appointment-list.html"; 
+        return "appointment-list"; 
     }
 
     
@@ -28,7 +28,7 @@ public class Admincontroller {
     public String blank() {
     	
         
-        return "blank-page.html"; 
+        return "blank-page"; 
     }
 
 
@@ -36,7 +36,7 @@ public class Admincontroller {
     public String component() {
     	
         
-        return "components.html"; 
+        return "components"; 
     }
 
     
@@ -44,14 +44,14 @@ public class Admincontroller {
     public String datatables() {
     	
         
-        return "data-tables.html"; 
+        return "data-tables"; 
     }
 
-    @GetMapping("/dotcor-list")
+    @GetMapping("/doctor-list")
     public String dotcorlist() {
     	
         
-        return "dotcor-list.html"; 
+        return "doctor-list"; 
     }
 
 
@@ -59,7 +59,7 @@ public class Admincontroller {
     public String error404() {
     	
         
-        return "error-404.html"; 
+        return "error-404"; 
     }
 
 
@@ -67,7 +67,7 @@ public class Admincontroller {
     public String error505() {
     	
         
-        return "error-505.html"; 
+        return "error-505"; 
     }
 
     
@@ -75,7 +75,7 @@ public class Admincontroller {
     public String forgotpassword() {
     	
         
-        return "forgot-password.html"; 
+        return "forgot-password"; 
     }
 
     
@@ -83,7 +83,7 @@ public class Admincontroller {
     public String formbasiinputs() {
     	
         
-        return "form-basic-inputs.html"; 
+        return "form-basic-inputs"; 
     }
 
 
@@ -91,7 +91,7 @@ public class Admincontroller {
     public String formhorizontal() {
     	
         
-        return "form-horizontal.html"; 
+        return "form-horizontal"; 
     }
 
     
@@ -99,7 +99,7 @@ public class Admincontroller {
     public String forminputgroups() {
     	
         
-        return "form-input-groups.html"; 
+        return "form-input-groups"; 
     }
 
 
@@ -107,7 +107,7 @@ public class Admincontroller {
     public String formmask() {
     	
         
-        return "form-mask.html"; 
+        return "form-mask"; 
     }
 
  
@@ -115,7 +115,7 @@ public class Admincontroller {
     public String formvalidation() {
     	
         
-        return "form-validation.html"; 
+        return "form-validation"; 
     }
 
 
@@ -123,7 +123,7 @@ public class Admincontroller {
     public String formvetial() {
     	
         
-        return "form-vartical.html"; 
+        return "form-vartical"; 
     }
 
      
@@ -131,7 +131,7 @@ public class Admincontroller {
     public String invoicereport() {
     	
         
-        return "invoice-report.html"; 
+        return "invoice-report"; 
     }
 
     
@@ -139,7 +139,7 @@ public class Admincontroller {
     public String invoice() {
     	
         
-        return "invoice.html"; 
+        return "invoice"; 
     }
 
 
@@ -148,7 +148,7 @@ public class Admincontroller {
     public String login() {
     	
         
-        return "login.html"; 
+        return "login"; 
     }
 
 
@@ -156,7 +156,7 @@ public class Admincontroller {
     public String lockscreen() {
     	
         
-        return "lock-screen.html"; 
+        return "lock-screen"; 
     }
 
     
@@ -164,7 +164,7 @@ public class Admincontroller {
     public String patientlist() {
     	
         
-        return "patient-list.html"; 
+        return "patient-list"; 
     }
 
 
@@ -173,7 +173,7 @@ public class Admincontroller {
     public String profile() {
     	
         
-        return "profile.html"; 
+        return "profile"; 
     }
 
 
@@ -181,7 +181,7 @@ public class Admincontroller {
     public String register() {
     	
         
-        return "register.html"; 
+        return "register"; 
     }
 
 
@@ -189,7 +189,7 @@ public class Admincontroller {
     public String review() {
     	
         
-        return "reviews.html"; 
+        return "reviews"; 
     }
 
      
@@ -198,7 +198,7 @@ public class Admincontroller {
     public String setting() {
     	
         
-        return "settings.html"; 
+        return "settings"; 
     }
 
 
@@ -206,7 +206,7 @@ public class Admincontroller {
     public String specialities() {
     	
         
-        return "specialities.html"; 
+        return "specialities"; 
     }
 
 
@@ -214,7 +214,7 @@ public class Admincontroller {
     public String tablesbasic() {
     	
         
-        return "tablesbasic.html"; 
+        return "tablesbasic"; 
     }
 
 
@@ -222,7 +222,7 @@ public class Admincontroller {
     public String transactionslist() {
     	
         
-        return "transactions-list.html"; 
+        return "transactions-list"; 
     }
 
 
