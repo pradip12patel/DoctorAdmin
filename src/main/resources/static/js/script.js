@@ -237,3 +237,99 @@ Version      : 1.0
 
 	
 })(jQuery);
+
+
+document.addEventListener('DOMContentLoaded', () => {
+	const apiUrl = "http://localhost:8086/api/doctor/with-patients";
+	const container = document.getElementById('doctor-patient-container');
+	const messageDiv = document.getElementById('message');
+  
+	// Function to fetch data from the backend
+	async function fetchDoctorPatientData() {
+		try {
+			const response = await fetch(apiUrl);
+			if (response.ok) {
+				const data = await response.json();
+  
+				// Display the message
+				messageDiv.classList.add('message');
+				messageDiv.innerText = data.message;
+  
+				// Display doctors and their patients
+				data.body.forEach(doctor => {
+					// Create doctor card
+					const doctorCard = document.createElement('div');
+					doctorCard.classList.add('card');
+					doctorCard.setAttribute('id', `doctor-${doctor.doctorId}`); // Add a unique ID for the doctor
+  
+					// Add doctor details and patient list inside the table
+					const doctorTable = `
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="datatable table table-hover table-center mb-0">
+									<thead>
+										<tr>
+											<th>Doctor Name</th>
+											<th>Speciality</th>
+											<th>Patient Name</th>
+											<th>Apointment Time</th>
+											<th>Status</th>
+											<th class="text-right">Amount</th>
+										</tr>
+									</thead>
+									<tbody>
+										${doctor.patients.length > 0
+											? doctor.patients.map(patient => `
+												<tr>
+													<td>
+														<h2 class="table-avatar">
+															<a href="profile.html" class="avatar avatar-sm mr-2">
+																<img class="avatar-img rounded-circle" src="img/doctors/doctor-thumb-${doctor.doctorId}.jpg" alt="Doctor Image">
+															</a>
+															<a href="profile.html">${doctor.doctorName}</a>
+														</h2>
+													</td>
+													<td>${doctor.specialization}</td>
+													<td>
+														<h2 class="table-avatar">
+															<a href="profile.html" class="avatar avatar-sm mr-2">
+																<img class="avatar-img rounded-circle" src="img/patients/patient${patient.patientId}.jpg" alt="Patient Image">
+															</a>
+															<a href="profile.html">${patient.patientName}</a>
+														</h2>
+													</td>
+													<td>${patient.appointmentTime} <span class="text-primary d-block">${patient.appointmentSlot}</span></td>
+													<td>
+														<div class="status-toggle">
+															<input type="checkbox" id="status_${patient.patientId}" class="check" ${patient.status === 'completed' ? 'checked' : ''}>
+															<label for="status_${patient.patientId}" class="checktoggle">checkbox</label>
+														</div>
+													</td>
+													<td class="text-right">$${patient.amount}</td>
+												</tr>
+											`).join("")
+											: "<tr><td colspan='6'>No patients assigned</td></tr>"
+										}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					`;
+
+					// Append doctor table to the container
+					doctorCard.innerHTML = doctorTable;
+					container.appendChild(doctorCard);
+				});
+			} else {
+				throw new Error(`Error: ${response.statusText}`);
+			}
+		} catch (error) {
+			messageDiv.classList.add('message');
+			messageDiv.innerText = `Failed to fetch data: ${error.message}`;
+		}
+	}
+  
+	fetchDoctorPatientData();
+});
+
+  
