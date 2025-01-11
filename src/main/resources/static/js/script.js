@@ -239,27 +239,42 @@ Version      : 1.0
 })(jQuery);
 
 
-document.addEventListener('DOMContentLoaded', () => {
-	const apiUrl = "http://localhost:8086/api/doctor/with-patients";
+	const apiUrl = "http://localhost:8086/api/doctor-with-patients";
 	const container = document.getElementById('doctor-patient-container');
-	const messageDiv = document.getElementById('message');
-  
-	// Function to fetch data from the backend
+	// const messageDiv = document.getElementById('message');
+
+	
+function trimAppointmentSlotByComma(appointmentSlot) {
+    
+    const parts = appointmentSlot.split(',', 2); 
+    if (parts.length === 2) {
+        return {
+            date: parts[0].trim(),  // Date part
+            time: parts[1].trim()   // Time part
+        };
+    } else {
+        return null;  // If the format doesn't match
+    }
+}
+
+
+
 	async function fetchDoctorPatientData() {
 		try {
 			const response = await fetch(apiUrl);
 			if (response.ok) {
-				const data = await response.json();
+				const {data} = await response.json();
+				console.log("responseresponse", data)
   
-				// Display the message
-				messageDiv.classList.add('message');
-				messageDiv.innerText = data.message;
+			//	Display the message
+			//	messageDiv.classList.add('message');
+			//	messageDiv.innerText = data.message;
   
 				// Display doctors and their patients
-				data.body.forEach(doctor => {
+				data.forEach(doctor => {
 					// Create doctor card
-					const doctorCard = document.createElement('div');
-					doctorCard.classList.add('card');
+					const doctorCard = document.getElementsByClassName('datadiv')[0];
+					// doctorCard.classList.add('card');
 					doctorCard.setAttribute('id', `doctor-${doctor.doctorId}`); // Add a unique ID for the doctor
   
 					// Add doctor details and patient list inside the table
@@ -284,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
 													<td>
 														<h2 class="table-avatar">
 															<a href="profile.html" class="avatar avatar-sm mr-2">
-																<img class="avatar-img rounded-circle" src="img/doctors/doctor-thumb-${doctor.doctorId}.jpg" alt="Doctor Image">
+																<img class="avatar-img rounded-circle" src="${doctor.ImageUrl}" alt="Doctor Image">
 															</a>
 															<a href="profile.html">${doctor.doctorName}</a>
 														</h2>
@@ -293,19 +308,19 @@ document.addEventListener('DOMContentLoaded', () => {
 													<td>
 														<h2 class="table-avatar">
 															<a href="profile.html" class="avatar avatar-sm mr-2">
-																<img class="avatar-img rounded-circle" src="img/patients/patient${patient.patientId}.jpg" alt="Patient Image">
+																<img class="avatar-img rounded-circle" src="${patient.ImageUrl}" alt="Patient Image">
 															</a>
 															<a href="profile.html">${patient.patientName}</a>
 														</h2>
 													</td>
-													<td>${patient.appointmentTime} <span class="text-primary d-block">${patient.appointmentSlot}</span></td>
+													<td>${patient.ApointmentSlot} <span class="text-primary d-block">${patient.ApointmentSlot}</span></td>
 													<td>
 														<div class="status-toggle">
 															<input type="checkbox" id="status_${patient.patientId}" class="check" ${patient.status === 'completed' ? 'checked' : ''}>
 															<label for="status_${patient.patientId}" class="checktoggle">checkbox</label>
 														</div>
 													</td>
-													<td class="text-right">$${patient.amount}</td>
+													<td class="text-right">$${patient.paid}</td>
 												</tr>
 											`).join("")
 											: "<tr><td colspan='6'>No patients assigned</td></tr>"
@@ -324,12 +339,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				throw new Error(`Error: ${response.statusText}`);
 			}
 		} catch (error) {
-			messageDiv.classList.add('message');
-			messageDiv.innerText = `Failed to fetch data: ${error.message}`;
+			// messageDiv.classList.add('message');
+			// messageDiv.innerText = `Failed to fetch data: ${error.message}`;
+			console.log("Error while fetching the data", error)
 		}
 	}
   
 	fetchDoctorPatientData();
-});
+
 
   
