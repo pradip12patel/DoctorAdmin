@@ -295,6 +295,7 @@ function trimAppointmentSlotByComma(appointmentSlot) {
 									<tbody>
 										${doctor.patients.length > 0
 											? doctor.patients.map(patient => `
+
 												<tr>
 													<td>
 														<h2 class="table-avatar">
@@ -345,7 +346,23 @@ function trimAppointmentSlotByComma(appointmentSlot) {
 		}
 	}
   
+
 	fetchDoctorPatientData();
+
+
+	// Function to trim the appointment slot by the first comma
+function trimAppointmentSlotByComma(appointmentSlot) {
+    // Split the string at the first comma
+    const parts = appointmentSlot.split(',', 2); // Split into 2 parts at the first comma
+    if (parts.length === 2) {
+        return {
+            date: parts[0].trim(),  // Date part
+            time: parts[1].trim()   // Time part
+        };
+    } else {
+        return { date: "", time: "" };  // In case format doesn't match
+    }
+}
 
 
   
