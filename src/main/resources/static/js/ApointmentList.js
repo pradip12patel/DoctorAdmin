@@ -3,22 +3,6 @@
 
 const apiUrl = "http://localhost:8086/api/doctor-with-patients";
 const container = document.getElementById('doctor-patient-container');
-// const messageDiv = document.getElementById('message');
-
-
-// function trimAppointmentSlotByComma(appointmentSlot) {
-
-//     const parts = appointmentSlot.split(',', 2);
-//     if (parts.length === 2) {
-//         return {
-//             date: parts[0].trim(),  // Date part
-//             time: parts[1].trim()   // Time part
-//         };
-//     } else {
-//         return null;  // If the format doesn't match
-//     }
-// }
-
 
 
 async function fetchDoctorPatientData() {
