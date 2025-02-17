@@ -47,6 +47,9 @@ async function fetchDoctorPatientData() {
                                                           ? patient.appointments[0].appointmentSlot
                                                           : 'Not Scheduled';
 
+                                                      // Get the total paid amount from the patient's appointments
+                                                      const totalPaid = patient.appointments.reduce((acc, appointment) => acc + (parseFloat(appointment.paid) || 0), 0);
+
                                                       return `
                                                           <tr>
                                                               <td>
@@ -82,7 +85,7 @@ async function fetchDoctorPatientData() {
                                                                       <label for="status_${doctor.doctorId}" class="checktoggle"></label>
                                                                   </div>
                                                               </td>
-                                                              <td class="text-right">${patient.paid}rs</td>
+                                                              <td class="text-right">${totalPaid}rs</td>
                                                           </tr>
                                                       `;
                                                   })
@@ -106,6 +109,7 @@ async function fetchDoctorPatientData() {
         console.error("Error while fetching the data", error);
     }
 }
+
 
 fetchDoctorPatientData();
 

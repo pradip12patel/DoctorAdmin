@@ -5,6 +5,7 @@ const tableBody = document.getElementById("doctor-table-body-index");
 const doctorCountElement = document.getElementById("doctor-count");
 const patientCountElement = document.getElementById("patient-count");
 const appointmentCountElement = document.getElementById("appointment-count");
+const earningsCountElement = document.getElementById("earning-count");
 
 async function fetchDoctorDetails() {
     try {
@@ -13,11 +14,13 @@ async function fetchDoctorDetails() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const { data } = await response.json();
-        console.log("Fetched Doctor Data:", data);
+        const responseData = await response.json();
+        const doctorData = responseData.data || []; // Ensure it's an array
 
-        populateDoctorTable(data);
-        updateCounts(data); // Update doctor, patient, and appointment counts
+        console.log("Fetched Doctor Data:", doctorData);
+
+        populateDoctorTable(doctorData);
+        updateCounts(doctorData);
     } catch (error) {
         console.error("Error fetching doctor details:", error);
     }
@@ -28,15 +31,15 @@ function generateStars(rating) {
     let stars = "";
     for (let i = 0; i < 5; i++) {
         stars += i < rating
-            ? `<i class="fas fa-star text-warning"></i>`  
-            : `<i class="far fa-star text-warning"></i>`; 
+            ? `<i class="fas fa-star text-warning"></i>`
+            : `<i class="far fa-star text-warning"></i>`;
     }
     return stars;
 }
 
 // Function to populate doctor table
 function populateDoctorTable(doctorData) {
-    tableBody.innerHTML = ""; 
+    tableBody.innerHTML = "";
 
     doctorData.forEach((doctor) => {
         let totalRating = 0;
@@ -46,9 +49,13 @@ function populateDoctorTable(doctorData) {
             doctor.patients.forEach(patient => {
                 if (patient.appointments && patient.appointments.length > 0) {
                     patient.appointments.forEach(appointment => {
-                        if (appointment.reviews && appointment.reviews.rating) {
-                            totalRating += appointment.reviews.rating;
-                            ratingCount++;
+                        if (appointment.reviews && Array.isArray(appointment.reviews)) {
+                            appointment.reviews.forEach(review => {
+                                if (review.rating) {
+                                    totalRating += review.rating;
+                                    ratingCount++;
+                                }
+                            });
                         }
                     });
                 }
@@ -56,8 +63,7 @@ function populateDoctorTable(doctorData) {
         }
 
         let avgRating = ratingCount > 0 ? Math.round(totalRating / ratingCount) : 0;
-
-        const doctorImage = doctor.ImageUrl || "img/doctors/default-doctor.jpg"; 
+        const doctorImage = doctor.ImageUrl || "img/doctors/default-doctor.jpg";
 
         // Create table row
         const row = document.createElement("tr");
@@ -71,7 +77,7 @@ function populateDoctorTable(doctorData) {
                 </h2>
             </td>
             <td>${doctor.specialization}</td>
-            <td>${doctor.earnings.toFixed(2)}rs</td>
+            <td>${parseFloat(doctor.earnings || 0).toFixed(2)}rs</td>
             <td>${generateStars(avgRating)}</td>
         `;
 
@@ -79,29 +85,43 @@ function populateDoctorTable(doctorData) {
     });
 }
 
-// Function to update the counts of doctors, patients, and appointments
+// Function to update counts for doctors, patients, and appointments
 function updateCounts(doctorData) {
     const doctorCount = doctorData.length;
     let patientCount = 0;
     let appointmentCount = 0;
+    let totalEarnings = 0;
 
     doctorData.forEach((doctor) => {
-        if (doctor.patients) {
+        // Count patients directly under the doctor
+        if (doctor.patients && doctor.patients.length > 0) {
             patientCount += doctor.patients.length;
-
-            doctor.patients.forEach(patient => {
-                if (patient.appointments) {
+            
+            // Iterate through each patient and count their appointments
+            doctor.patients.forEach((patient) => {
+                if (patient.appointments && patient.appointments.length > 0) {
                     appointmentCount += patient.appointments.length;
+
+                    // Sum earnings from the patient appointments
+                    patient.appointments.forEach((appointment) => {
+                        totalEarnings += parseFloat(appointment.paid) || 0;  // Sum paid amount from each appointment
+                    });
                 }
             });
         }
+
+        // Add the doctor's direct earnings to total earnings
+        totalEarnings += parseFloat(doctor.earnings) || 0;
     });
 
-    // Display counts
-    doctorCountElement.textContent = doctorCount;
-    patientCountElement.textContent = patientCount;
-    appointmentCountElement.textContent = appointmentCount;
+    // Update UI only if elements exist
+    if (doctorCountElement) doctorCountElement.textContent = doctorCount;
+    if (patientCountElement) patientCountElement.textContent = patientCount;
+    if (appointmentCountElement) appointmentCountElement.textContent = appointmentCount;
+    if (earningsCountElement) earningsCountElement.textContent = `${totalEarnings.toFixed(2)}rs`;
 }
+
+
 
 // Fetch and populate doctor details
 fetchDoctorDetails();
