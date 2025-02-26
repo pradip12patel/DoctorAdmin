@@ -44,7 +44,7 @@ function populateDoctorTable(doctorData) {
             <td>${doctor.memberSince ? new Date(doctor.memberSince).toLocaleDateString() : "N/A"} 
                 <br><small>${doctor.memberSince ? new Date(doctor.memberSince).toLocaleTimeString() : ""}</small>
             </td>
-            <td>${doctor.earnings ? doctor.earnings.toFixed(2) : "0.00"}rs</td>
+            <td>${doctor.Earnings ? doctor.Earnings.toFixed(2) : "0.00"}rs</td>
             <td>
                 <div class="status-toggle">
                     <input type="checkbox" id="status_${doctor.doctorId}" class="check" ${doctor.status ? 'checked' : ''}>
